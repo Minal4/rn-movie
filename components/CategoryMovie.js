@@ -1,19 +1,60 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TouchableOpacity } from 'react-native'
+import { ScrollView } from 'react-native'
 
-const CategoryMovie = ({ data, images, setImages }) => {
-    console.log(images)
-    const handleOnCat = (id) => {
-        images.results.map((item, index) => console.log(item))
-    }
+const CategoryMovie = ({ images, setFiltered, activeGenre, setActiveGenre }) => {
+
+    useEffect(() => {
+        if (activeGenre === 0) {
+            setFiltered(images)
+            return;
+        }
+
+        const filteredMovie = images.filter((item) => item.genre_ids.includes(activeGenre))
+        setFiltered(filteredMovie)
+    }, [activeGenre])
+
+
 
     return (
-        <TouchableOpacity onPress={() => handleOnCat(data.id)}>
-            <View className="mr-2 border py-2 px-4">
-                <Text>{data.name}</Text>
-            </View>
-        </TouchableOpacity>
+        <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            className='pb-5'
+        >
+
+            <TouchableOpacity onPress={() => setActiveGenre(0)}>
+                <View className="mr-2 border py-2 px-4">
+                    <Text >All</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActiveGenre(35)}>
+                <View className="mr-2 border py-2 px-4">
+                    <Text >Comedy</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActiveGenre(28)}>
+                <View className="mr-2 border py-2 px-4">
+                    <Text >Action</Text>
+                </View >
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActiveGenre(16)}>
+                <View className="mr-2 border py-2 px-4">
+                    <Text >Animation</Text>
+                </View >
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActiveGenre(14)}>
+                <View className="mr-2 border py-2 px-4">
+                    <Text >Fantasy</Text>
+                </View >
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setActiveGenre(10402)}>
+                <View className="mr-2 border py-2 px-4">
+                    <Text >Music</Text>
+                </View >
+            </TouchableOpacity>
+        </ScrollView>
     )
 }
 
