@@ -2,10 +2,10 @@ import { TextInput, Image, SafeAreaView, View, Text, ScrollView, TouchableOpacit
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import Gallery from '../components/Gallery';
-import CategoryMovie from '../components/CategoryMovie';
 import Button from '../components/Button';
 import Toast from 'react-native-toast-message';
 import Loading from '../components/Loading';
+import FavouriteHeader from '../components/FavouriteHeader';
 
 const FavouriteScreen = () => {
     const [images, setImages] = useState([])
@@ -66,69 +66,93 @@ const FavouriteScreen = () => {
 
     if (!loaded) return null;
     return (
-        <SafeAreaView className='px-5 mt-12 pb-[300px]'>
-            <View className="flex-row items-center justify-between">
-                <View>
-                    <Text
-                        style={{ fontFamily: 'MontsBold' }}
-                        className="text-2xl w-3/4">Find Your </Text>
-                    <Text
-                        style={{ fontFamily: 'MontsBold' }}
-                        className="text-2xl w-4/4"
-                    >Favourite Movie</Text>
-                </View>
-                <Image
-                    className="w-14 h-14 rounded-full"
-                    source={require('../assets/images/profile.png')}
-                />
-            </View>
-            <View className='mt-4'>
-                <TextInput
-                    placeholder='Your Destination...'
-                    value={searchItem}
-                    onChangeText={(newText) => setSearchItem(newText)}
-                    className="bg-[#333] p-4 rounded-lg text-white placeholder-white"
-                >
+        <SafeAreaView className='px-5 mt-12 pb-[10px]'>
+            <View>
+                {
+                    !loading ?
+                        searchItem.length ?
+                            <FlatList
+                                ListFooterComponent={
+                                    !searchItem &&
+                                    <TouchableOpacity onPress={handleOnMore} className='mt-5 text-center'>
+                                        <Button title='Load More' />
+                                    </TouchableOpacity>
+                                }
+                                data={search.results}
+                                ListHeaderComponent={
+                                    <FavouriteHeader
+                                        searchItem={searchItem}
+                                        setSearchItem={setSearchItem}
+                                        images={images}
+                                        activeGenre={activeGenre}
+                                        setActiveGenre={setActiveGenre}
+                                        setImages={setImages}
+                                        filtered={filtered}
+                                        setFiltered={setFiltered}
+                                        page={page} />
+                                }
 
-                </TextInput>
-            </View>
-            <View
-                className='mt-5'
-            >
-                <CategoryMovie images={images} activeGenre={activeGenre} setActiveGenre={setActiveGenre} setImages={setImages} filtered={filtered} setFiltered={setFiltered} page={page} />
-            </View>
-            {
-                !loading ?
-                    searchItem.length ?
-                        <FlatList
-                            data={search.results}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => <Gallery data={item} />}
-                            keyExtractor={(item) => item.id}
-                        >
-                        </FlatList>
-                        : <FlatList
-                            data={images}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item }) => <Gallery data={item} />}
-
-                            keyExtractor={(item) => item.id}
-                        />
-                            ? <FlatList
-                                data={filtered}
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item }) => <Gallery data={item} />}
+                                keyExtractor={(item) => item.id}
+                            >
+                            </FlatList>
+                            : <FlatList
+                                ListFooterComponent={
+                                    !searchItem &&
+                                    <TouchableOpacity onPress={handleOnMore} className='mt-5 text-center'>
+                                        <Button title='Load More' />
+                                    </TouchableOpacity>
+                                }
+                                data={images}
+                                ListHeaderComponent={
+                                    <FavouriteHeader
+                                        searchItem={searchItem}
+                                        setSearchItem={setSearchItem}
+                                        images={images}
+                                        activeGenre={activeGenre}
+                                        setActiveGenre={setActiveGenre}
+                                        setImages={setImages}
+                                        filtered={filtered}
+                                        setFiltered={setFiltered}
+                                        page={page} />
+                                }
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item }) => <Gallery data={item} />}
 
                                 keyExtractor={(item) => item.id}
-                            >
-                            </FlatList>
-                            : ''
-                    : <Loading />
+                            />
+                                ? <FlatList
+                                    ListFooterComponent={
+                                        !searchItem &&
+                                        <TouchableOpacity onPress={handleOnMore} className='mt-5 text-center'>
+                                            <Button title='Load More' />
+                                        </TouchableOpacity>
+                                    }
+                                    ListHeaderComponent={
+                                        <FavouriteHeader
+                                            searchItem={searchItem}
+                                            setSearchItem={setSearchItem}
+                                            images={images}
+                                            activeGenre={activeGenre}
+                                            setActiveGenre={setActiveGenre}
+                                            setImages={setImages}
+                                            filtered={filtered}
+                                            setFiltered={setFiltered}
+                                            page={page} />
+                                    }
+                                    data={filtered}
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item }) => <Gallery data={item} />}
 
-            }
-            <TouchableOpacity className=' mt-5 w-auto text-center mx-auto' onPress={handleOnMore}>
-                <Button title='Load More' ></Button>
-            </TouchableOpacity>
+                                    keyExtractor={(item) => item.id}
+                                >
+                                </FlatList>
+                                : ''
+                        : <Loading />
+
+                }
+            </View >
         </SafeAreaView >
     )
 }

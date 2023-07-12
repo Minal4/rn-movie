@@ -32,11 +32,12 @@ export default function HomeScreens({ navigation }) {
                         className='text-white
                     '>If you like to enjoy, this is your place! Here you can watch without hassle and enjoy it.</Animatable.Text>
                 </View>
-                <View className='px-5 z-20'>
+                <Animatable.View className='px-5 z-20'
+                    animation='slideInUp'>
                     <TouchableOpacity onPress={() => navigation.navigate('Favourite')}>
                         <Button title='Get Started' />
                     </TouchableOpacity>
-                </View>
+                </Animatable.View>
             </View>
         </SafeAreaView>
     )
